@@ -4,7 +4,6 @@ Uses mocked ROS2 nodes to verify Byzantine Fault Tolerance.
 """
 
 
-from entrodyn_ros.swarm_controller import SwarmController
 import sys
 import os
 import unittest
@@ -17,6 +16,8 @@ mock_node_module = MagicMock()
 
 
 class MockNode:
+    """Mock ROS2 Node for testing without ROS installation."""
+
     def __init__(self, node_name):
         self.node_name = node_name
         self.get_logger = MagicMock()
@@ -41,7 +42,6 @@ class TestByzantineFaultTolerance(unittest.TestCase):
     Test Suite for PBFT Logic (Practical Byzantine Fault Tolerance).
     Verifies consensus mechanisms and resilience against compromised nodes.
     """
-    """Test Suite for PBFT Logic"""
 
     def setUp(self):
         self.controller = SwarmController()

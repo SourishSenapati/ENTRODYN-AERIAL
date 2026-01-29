@@ -3,6 +3,7 @@ Digital Twin Verification Module.
 Runs pre-flight simulation checks using NVIDIA Isaac Sim estimates.
 """
 
+from simulation.weather_data_service import OpenMeteoService
 import os
 import random
 import sys
