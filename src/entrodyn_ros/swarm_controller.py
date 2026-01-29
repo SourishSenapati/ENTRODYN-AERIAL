@@ -1,5 +1,24 @@
-import rclpy
-from rclpy.node import Node
+try:
+    import rclpy
+    from rclpy.node import Node
+except ImportError:
+    # Windows/Testing Fallback
+    # This allows the code to be imported and tested without a full ROS2 installation
+    class Node:
+        """Mock Node for Testing/Windows"""
+
+        def __init__(self, name):
+            self.node_name = str(name)
+
+        def get_logger(self):
+            return self
+
+        def warn(self, msg):
+            print(f"[LOG:WARN] {msg}")
+
+        def info(self, msg):
+            print(f"[LOG:INFO] {msg}")
+
 import numpy as np
 
 
