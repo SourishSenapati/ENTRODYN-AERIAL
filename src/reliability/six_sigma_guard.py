@@ -1,3 +1,7 @@
+"""
+Reliability Module.
+Contains the SixSigmaGuard class for Bayesian fault detection.
+"""
 import numpy as np
 
 

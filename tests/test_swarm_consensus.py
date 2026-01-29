@@ -37,6 +37,10 @@ if src_path not in sys.path:
 
 
 class TestByzantineFaultTolerance(unittest.TestCase):
+    """
+    Test Suite for PBFT Logic (Practical Byzantine Fault Tolerance).
+    Verifies consensus mechanisms and resilience against compromised nodes.
+    """
     """Test Suite for PBFT Logic"""
 
     def setUp(self):

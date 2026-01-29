@@ -2,10 +2,10 @@
 Test suite for Six Sigma Reliability Guard.
 Verifies that random noise is rejected and true leaks are confirmed.
 """
-from reliability.six_sigma_guard import SixSigmaGuard
 import sys
 import os
 import unittest
+from reliability.six_sigma_guard import SixSigmaGuard
 
 # Add src to path
 src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../src'))
@@ -14,6 +14,11 @@ if src_path not in sys.path:
 
 
 class TestSixSigmaReliability(unittest.TestCase):
+    """
+    Unit tests for the Six Sigma Reliability Guard.
+    Ensures that the Bayesian Filter correctly distinguishes between noise and true leaks.
+    """
+
     def setUp(self):
         self.guard = SixSigmaGuard()
 

@@ -8,7 +8,7 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import torch
-import torch.nn as nn
+
 import torch.nn.functional as F
 
 # 1. Setup Path for imports (CRITICAL: Must be first)
