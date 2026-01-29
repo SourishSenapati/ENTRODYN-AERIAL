@@ -3,17 +3,37 @@ Unit tests for Swarm Consensus Logic.
 Uses mocked ROS2 nodes to verify Byzantine Fault Tolerance.
 """
 
-# 1. Mock module 'rclpy' since we are on Windows (Simulating Linux ROS2 environment)
-from entrodyn_ros.swarm_controller import SwarmController
-sys.modules['rclpy'] = MagicMock()
-sys.modules['rclpy.node'] = MagicMock()
-Node.get_logger = MagicMock()
 
-# 2. Import the SwarmController
-# Ensure we add the absolute path to 'src'
+from entrodyn_ros.swarm_controller import SwarmController
+import sys
+import os
+import unittest
+from unittest.mock import MagicMock
+
+# 1. Mock module 'rclpy' FIRST (Simulating Linux ROS2 environment on Windows)
+# This allows 'from entrodyn_ros.swarm_controller' to import 'rclpy' as a mock
+mock_rclpy = MagicMock()
+mock_node_module = MagicMock()
+
+
+class MockNode:
+    def __init__(self, node_name):
+        self.node_name = node_name
+        self.get_logger = MagicMock()
+        self.create_publisher = MagicMock()
+        self.create_subscription = MagicMock()
+
+
+sys.modules['rclpy'] = mock_rclpy
+sys.modules['rclpy.node'] = mock_node_module
+sys.modules['rclpy.node'].Node = MockNode
+
+# 2. Add src to path
 src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../src'))
 if src_path not in sys.path:
     sys.path.append(src_path)
+
+# 3. Import the SwarmController (after mocking and path setup)
 
 
 class TestByzantineFaultTolerance(unittest.TestCase):

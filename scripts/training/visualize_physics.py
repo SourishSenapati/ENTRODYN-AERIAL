@@ -1,10 +1,15 @@
+"""
+Physics Visualization Script.
+Generates plots for KAN activations and Entropy fields.
+"""
+
+import os
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
-import torch.nn.functional as F
-import torch.nn as nn
 import torch
-import sys
-import os
+import torch.nn as nn
+import torch.nn.functional as F
 
 # 1. Setup Path for imports (CRITICAL: Must be first)
 # Add src directory to system path so we can import pikan_core
@@ -14,7 +19,6 @@ if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
 print(f"DEBUG: sys.path[0] is {sys.path[0]}")
-
 
 # 2. Import Custom Modules
 try:
@@ -85,10 +89,10 @@ def plot_entropy_field():
     grid_size = 100
     x = np.linspace(0, 100, grid_size)
     y = np.linspace(0, 100, grid_size)
-    X, Y = np.meshgrid(x, y)
+    grid_x, grid_y = np.meshgrid(x, y)
     source = (50, 50)
-    concentration_np = np.exp(-((X - source[0])
-                              ** 2 + (Y - source[1])**2) / 200.0)
+    concentration_np = np.exp(-((grid_x - source[0])
+                              ** 2 + (grid_y - source[1])**2) / 200.0)
 
     # Move to GPU for calculation
     c_field = torch.tensor(concentration_np, dtype=torch.float32,
@@ -100,6 +104,8 @@ def plot_entropy_field():
 
     # Plotting (CPU)
     fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+    # Fix unused variable warning by using fig (e.g. suptitle) or ignoring
+    fig.suptitle("Thermodynamic Entropy Analysis")
 
     # Concentration
     im1 = axes[0].imshow(concentration_np, cmap='viridis', origin='lower')

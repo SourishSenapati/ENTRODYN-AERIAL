@@ -4,9 +4,7 @@ Runs pre-flight simulation checks using NVIDIA Isaac Sim estimates.
 """
 
 from simulation.weather_data_service import OpenMeteoService
-from simulation.weather_data_service import OpenMeteoServicele:
 import os
-import random
 import random
 import sys
 

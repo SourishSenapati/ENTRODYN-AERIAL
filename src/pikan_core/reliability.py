@@ -27,7 +27,8 @@ class ByzantineConsensus:
         Validates a list of navigation vectors from the swarm using geometric median consensus.
 
         Args:
-            vectors: List of shape (2,) or (3,) numpy arrays representing proposed velocity/direction.
+            vectors: List of shape (2,) or (3,) numpy arrays representing 
+                     proposed velocity/direction.
 
         Returns:
             (is_valid, consensus_vector): 
@@ -57,7 +58,8 @@ class ByzantineConsensus:
             valid_indices = np.where(distances < 1e-3)[0]
         else:
             # Standard "modified Z-score" approach: discard if > 3.5 MAD
-            # Here we simplify: if distance > 2 * median_distance (loose heuristic for swarm)
+            # Here we simplify: if distance > 2 * median_distance
+            # (loose heuristic for swarm)
             valid_indices = np.where(distances <= 2.5 * median_dist + 1e-6)[0]
 
         valid_count = len(valid_indices)

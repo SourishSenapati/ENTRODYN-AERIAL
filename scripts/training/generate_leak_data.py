@@ -1,7 +1,11 @@
+"""
+Synthetic Leak Data Generator.
+Creates Gaussian plume models for training calibration.
+"""
+
+import os
 import numpy as np
 import matplotlib.pyplot as plt
-import torch
-import os
 
 
 def generate_gaussian_plume(grid_size=100, source=(50, 50), wind=(1.0, 0.5)):
@@ -11,11 +15,11 @@ def generate_gaussian_plume(grid_size=100, source=(50, 50), wind=(1.0, 0.5)):
     """
     x = np.linspace(0, 100, grid_size)
     y = np.linspace(0, 100, grid_size)
-    X, Y = np.meshgrid(x, y)
+    grid_x, grid_y = np.meshgrid(x, y)
 
     # Advection-Diffusion Approximation
-    dist_x = X - source[0]
-    dist_y = Y - source[1]
+    dist_x = grid_x - source[0]
+    dist_y = grid_y - source[1]
 
     # Rotating for wind direction
     concentration = np.exp(-((dist_x - wind[0])

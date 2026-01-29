@@ -26,7 +26,7 @@ Once installed, the drone swarm lives in a "Drone-in-a-Box" station. It wakes up
 
 ---
 
-# Reliability Architecture: 6σ "Immortal" Swarm
+## Reliability Architecture: 6σ "Immortal" Swarm
 
 ## A. Byzantine Fault Tolerance (BFT)
 
