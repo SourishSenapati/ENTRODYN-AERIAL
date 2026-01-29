@@ -4,8 +4,8 @@ Creates Gaussian plume models for training calibration.
 """
 
 import os
-import numpy as np
-import matplotlib.pyplot as plt
+import numpy as np  # pylint: disable=import-error
+import matplotlib.pyplot as plt  # pylint: disable=import-error
 
 
 def generate_gaussian_plume(grid_size=100, source=(50, 50), wind=(1.0, 0.5)):

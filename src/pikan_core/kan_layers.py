@@ -4,9 +4,9 @@ Contains the required physics-informed B-Spline layers.
 """
 
 import math
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import torch  # pylint: disable=import-error
+import torch.nn as nn  # pylint: disable=import-error
+import torch.nn.functional as F  # pylint: disable=import-error
 
 
 class KANSplineLayer(nn.Module):

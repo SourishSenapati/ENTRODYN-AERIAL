@@ -36,6 +36,7 @@ if src_path not in sys.path:
 
 # 3. Import the SwarmController (after mocking and path setup)
 if 'entrodyn_ros.swarm_controller' not in sys.modules:
+    # pylint: disable=import-error
     from entrodyn_ros.swarm_controller import SwarmController
 else:
     SwarmController = sys.modules['entrodyn_ros.swarm_controller'].SwarmController

@@ -2,16 +2,18 @@
 Test suite for DeepAuditor.
 Verifies sensor saturation logic, material context analysis, and complex leak detection.
 """
+from core_logic.deep_auditor import DeepAuditor
 import sys
 import os
 import unittest
-import time
-from core_logic.deep_auditor import DeepAuditor
 
 # Add src to path
 src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../src'))
 if src_path not in sys.path:
     sys.path.append(src_path)
+
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 
 
 class TestDeepAuditor(unittest.TestCase):

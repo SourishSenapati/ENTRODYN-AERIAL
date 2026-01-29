@@ -56,7 +56,8 @@ def plot_kan_basis(grid_size=5, spline_order=3):
     with torch.no_grad():
         x_in = x.unsqueeze(1)  # [300, 1]
         y = layer(x_in)
-        base_out = F.linear(x_in, layer.base_weight)
+        base_out = F.linear(
+            x_in, layer.base_weight)  # pylint: disable=not-callable
 
     # Move back to CPU for plotting
     x_cpu = x.cpu().numpy()

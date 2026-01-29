@@ -5,7 +5,7 @@ Implements Byzantine Fault Tolerance and robust consensus mechanisms.
 
 from typing import List, Optional, Tuple
 from collections import Counter
-import numpy as np
+import numpy as np  # pylint: disable=import-error
 
 
 class ByzantineConsensus:
