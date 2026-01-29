@@ -8,6 +8,10 @@ import requests
 
 
 class OpenAQService:
+    """
+    Service to interact with OpenAQ API for air quality data.
+    """
+
     def __init__(self):
         self.base_url = "https://api.openaq.org/v2/latest"
 
@@ -27,11 +31,12 @@ class OpenAQService:
                 "parameter": ["pm25", "pm10"],
                 "limit": 3
             }
-            response = requests.get(self.base_url, params=params)
+            # Added timeout to prevent hanging
+            response = requests.get(self.base_url, params=params, timeout=10)
             response.raise_for_status()
-            data = response.json()
+            api_data = response.json()
 
-            results = data.get('results', [])
+            results = api_data.get('results', [])
             processed_data = []
 
             for res in results:
@@ -47,14 +52,14 @@ class OpenAQService:
 
             return processed_data
 
-        except Exception as e:
+        except (requests.RequestException, ValueError) as e:
             print(f"[WARNING] OpenAQ Fetch Failed: {e}")
             return []
 
 
 if __name__ == "__main__":
     service = OpenAQService()
-    data = service.get_local_pollution()
-    for entry in data:
-        print(
-            f"Location: {entry['location']} | {entry['parameter'].upper()}: {entry['value']} {entry['unit']}")
+    local_data = service.get_local_pollution()
+    for entry in local_data:
+        print(f"Location: {entry['location']} | "
+              f"{entry['parameter'].upper()}: {entry['value']} {entry['unit']}")

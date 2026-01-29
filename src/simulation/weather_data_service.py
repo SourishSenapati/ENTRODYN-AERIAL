@@ -4,11 +4,15 @@ Fetches real-time environmental data from Open-Meteo (Open Source Weather API).
 This allows the Digital Twin to run simulations against REAL operational conditions.
 """
 
-import requests
 import json
+import requests
 
 
 class OpenMeteoService:
+    """
+    Service to interact with Open-Meteo API for real-time weather data.
+    """
+
     def __init__(self):
         self.base_url = "https://api.open-meteo.com/v1/forecast"
 
@@ -30,17 +34,18 @@ class OpenMeteoService:
                 "longitude": longitude,
                 "current_weather": "true"
             }
-            response = requests.get(self.base_url, params=params)
+            # Added timeout to prevent hanging
+            response = requests.get(self.base_url, params=params, timeout=10)
             response.raise_for_status()
             data = response.json()
 
             weather = data.get('current_weather', {})
             return {
                 'wind_speed': weather.get('windspeed', 0.0),  # km/h
-                'temp': weather.get('temperature', 25.0),    # Celsius
+                'temp': weather.get('temperature', 25.0),     # Celsius
                 'is_real_data': True
             }
-        except Exception as e:
+        except (requests.RequestException, ValueError) as e:
             print(f"[WARNING] Open-Meteo Data Fetch Failed: {e}")
             print("[INFO] Falling back to synthetic local data.")
             return {

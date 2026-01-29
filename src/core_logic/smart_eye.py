@@ -1,14 +1,23 @@
+"""
+Smart Vision Module for ENTRODYN-AERIAL.
+Uses YOLOv8n for real-time object detection and avoidance vector calculation.
+"""
+
 import cv2
 import numpy as np
 from ultralytics import YOLO
 
 
 class SmartEye:
+    """
+    Vision processing unit using YOLOv8n.
+    Detects obstacles and suggests steering commands.
+    """
+
     def __init__(self):
         # Load lightweight model (Auto-downloads on first run)
         self.model = YOLO("yolov8n.pt")
-        # 0=Person, 15=Cat/Dog (Simulating dynamic obstacles)
-        self.classes_to_avoid = [0, 15, 16]
+        self.classes_to_avoid = [0, 15, 16]  # 0=Person, 15=Cat/Dog
         self.safe_distance_threshold = 0.4  # 40% of screen width
 
     def scan_frame(self, frame):
@@ -21,7 +30,8 @@ class SmartEye:
         obstacle_detected = False
 
         # Get frame center
-        height, width, _ = frame.shape
+        # height, width, _ = frame.shape (height unused)
+        width = frame.shape[1]
         center_x = width // 2
 
         for result in results:
@@ -50,8 +60,10 @@ class SmartEye:
                     color = (0, 0, 255) if obstacle_detected else (0, 255, 0)
                     cv2.rectangle(frame, (int(x1), int(y1)),
                                   (int(x2), int(y2)), color, 2)
-                    cv2.putText(frame, "OBSTACLE", (int(x1), int(y1)-10),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+                    cv2.putText(
+                        frame, "OBSTACLE", (int(x1), int(y1)-10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2
+                    )
 
         return frame, avoid_vector, obstacle_detected
 
@@ -70,8 +82,10 @@ if __name__ == "__main__":
         processed_img, cmd, hazard = eye.scan_frame(img)
 
         # Visualize Command
-        cv2.putText(processed_img, f"CMD: {cmd}", (50, 50),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+        cv2.putText(
+            processed_img, f"CMD: {cmd}", (50, 50),
+            cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2
+        )
 
         cv2.imshow("ENTRODYN SMART VISION", processed_img)
         if cv2.waitKey(1) & 0xFF == ord('q'):
