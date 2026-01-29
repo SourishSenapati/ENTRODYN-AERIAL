@@ -3,7 +3,6 @@ Digital Twin Verification Module.
 Runs pre-flight simulation checks using NVIDIA Isaac Sim estimates.
 """
 
-from simulation.weather_data_service import OpenMeteoService
 import os
 import random
 import sys
@@ -45,8 +44,8 @@ class DigitalTwinOracle:
             environmental_data = self.weather_service.get_current_conditions()
 
         print("\n" + "="*40)
-        print(
-            f"DIGITAL TWIN PRE-FLIGHT CHECK | Target: {mission_profile.get('site_name', 'Unknown')}")
+        print(f"DIGITAL TWIN PRE-FLIGHT CHECK | "
+              f"Target: {mission_profile.get('site_name', 'Unknown')}")
         print(f"IMPORTING REAL-TIME DATA: Wind={environmental_data.get('wind_speed', 0)}km/h, "
               f"Temp={environmental_data.get('temp', 25)}C")
         print("SIMULATING 1,000 MISSION RUNS...")
