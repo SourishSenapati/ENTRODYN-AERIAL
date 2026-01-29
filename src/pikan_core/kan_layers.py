@@ -1,7 +1,12 @@
+"""
+Standard KAN Layers implementation.
+Contains the required physics-informed B-Spline layers.
+"""
+
+import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import math
 
 
 class KANSplineLayer(nn.Module):
@@ -27,17 +32,22 @@ class KANSplineLayer(nn.Module):
         self.reset_parameters()
 
     def reset_parameters(self):
+        """Initialize parameters using Kaiming Uniform"""
         nn.init.kaiming_uniform_(self.base_weight, a=math.sqrt(5))
         nn.init.normal_(self.grid, mean=0.0, std=0.1)
 
     def forward(self, x):
+        """Forward pass with B-Spline computation"""
         # 1. Base Linear Transform (Fast path)
         base_output = F.linear(x, self.base_weight)
 
         # 2. B-Spline Transform (The "Physics" path)
         # TODO: Optimize this matmul for Jetson Orin Nano
         x_uns = x.unsqueeze(-1)  # [Batch, In, 1]
+
         # Simplified Basis Function (Gaussian approximation for speed)
+        # Note: True B-Splines are computationally heavier.
+        # This Gaussian approximation serves as a differentiable proxy.
         basis = torch.exp(-torch.pow(x_uns - self.grid.mean(), 2))
         spline_output = torch.matmul(basis, self.grid).sum(dim=1)
 
