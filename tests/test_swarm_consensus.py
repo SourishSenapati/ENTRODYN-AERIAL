@@ -3,14 +3,8 @@ Unit tests for Swarm Consensus Logic.
 Uses mocked ROS2 nodes to verify Byzantine Fault Tolerance.
 """
 
-from entrodyn_ros.swarm_controller import SwarmController
-from rclpy.node import Node
-import sys
-import os
-import unittest
-from unittest.mock import MagicMock
-
 # 1. Mock module 'rclpy' since we are on Windows (Simulating Linux ROS2 environment)
+from entrodyn_ros.swarm_controller import SwarmController
 sys.modules['rclpy'] = MagicMock()
 sys.modules['rclpy.node'] = MagicMock()
 Node.get_logger = MagicMock()

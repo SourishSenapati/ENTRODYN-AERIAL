@@ -4,19 +4,23 @@ Runs pre-flight simulation checks using NVIDIA Isaac Sim estimates.
 """
 
 from simulation.weather_data_service import OpenMeteoService
+from simulation.weather_data_service import OpenMeteoServicele:
+import os
+import random
 import random
 import sys
-import os
 
 # Add src to path to import weather service
 sys.path.append(os.path.abspath(os.path.join(
     os.path.dirname(__file__), '../../src')))
 
+# pylint: disable=wrong-import-position
+
 
 class DigitalTwinOracle:
     """
     Digital Twin "Pre-Flight" Check System.
-    Simulates the mission 1,000 times in NVIDIA Isaac Sim (Virtual) 
+    Simulates the mission 1,000 times in NVIDIA Isaac Sim (Virtual)
     before the physical drone lifts off.
     """
 
