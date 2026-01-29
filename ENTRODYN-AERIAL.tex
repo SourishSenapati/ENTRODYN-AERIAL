@@ -148,6 +148,31 @@
     \end{itemize}
 \end{frame}
 
+% SLIDE: AUTONOMOUS VISION SYSTEM
+\begin{frame}{AUTONOMOUS VISION SYSTEM}
+    \scriptsize % Compact font
+    \vspace{-0.6cm}
+    \begin{itemize} \itemsep0.4em
+        \item \textbf{The "Eyes" of the Swarm:}
+        \begin{itemize}
+            \item \textbf{Model:} \textbf{YOLOv8 Nano}, optimized for high-speed inference on Edge GPUs (NVIDIA Jetson / RTX 4050).
+            \item \textbf{Latency:} $<$40ms end-to-end processing allows for reaction speeds suitable for 60km/h flight.
+        \end{itemize}
+        
+        \item \textbf{Functional Logic:}
+        \begin{itemize}
+            \item \textbf{Object Detection:} Identifies "Person", "Industrial Pipes", and "Structural Beams" in real-time.
+            \item \textbf{Reactive Avoidance:} Calculates a steering vector to deviate from obstacles while maintaining formation.
+        \end{itemize}
+
+        \item \textbf{Integration with Entropy Navigation:}
+        \begin{itemize}
+            \item \textbf{Dual-Modal Control:} The drone follows the "Scent" (Entropy Gradient) but overrides the path if the "Vision" detects a collider.
+            \item \textbf{Safety-First:} Human presence triggers an immediate "Expand Formation" or "Halt" command.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
 % SLIDE 4: FEASIBILITY AND VIABILITY
 \begin{frame}{FEASIBILITY AND VIABILITY}
     \scriptsize % Compact font
