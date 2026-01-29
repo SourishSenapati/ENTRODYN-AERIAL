@@ -3,7 +3,14 @@ Digital Twin Verification Module.
 Runs pre-flight simulation checks using NVIDIA Isaac Sim estimates.
 """
 
+from simulation.weather_data_service import OpenMeteoService
 import random
+import sys
+import os
+
+# Add src to path to import weather service
+sys.path.append(os.path.abspath(os.path.join(
+    os.path.dirname(__file__), '../../src')))
 
 
 class DigitalTwinOracle:
@@ -15,24 +22,30 @@ class DigitalTwinOracle:
 
     def __init__(self, simulation_fidelity="HIGH"):
         self.fidelity = simulation_fidelity
+        self.weather_service = OpenMeteoService()
         print(
             f"[Digital Twin] Initializing virtual physics engine ({self.fidelity})...")
 
-    def run_pre_flight_check(self, mission_profile: dict, environmental_data: dict) -> bool:
+    def run_pre_flight_check(self, mission_profile: dict, environmental_data: dict = None) -> bool:
         """
         Runs 1,000 Monte Carlo simulations of the mission.
 
         Args:
             mission_profile: Path coordinates and objectives.
-            environmental_data: Wind speed, temperature, pressure (real-time).
+            environmental_data: Optional manual override. If None, fetches REAL data.
 
         Returns:
             GO / NO-GO status.
         """
+        if environmental_data is None:
+            print(
+                "[Digital Twin] Fetching REAL-TIME public weather data (Open-Meteo)...")
+            environmental_data = self.weather_service.get_current_conditions()
+
         print("\n" + "="*40)
         print(
             f"DIGITAL TWIN PRE-FLIGHT CHECK | Target: {mission_profile.get('site_name', 'Unknown')}")
-        print(f"IMPORTING REAL-TIME DATA: Wind={environmental_data.get('wind_speed', 0)}m/s, "
+        print(f"IMPORTING REAL-TIME DATA: Wind={environmental_data.get('wind_speed', 0)}km/h, "
               f"Temp={environmental_data.get('temp', 25)}C")
         print("SIMULATING 1,000 MISSION RUNS...")
 
@@ -79,3 +92,8 @@ if __name__ == "__main__":
     mission_b = {"site_name": "Platform_Alpha"}
     weather_b = {"wind_speed": 15.0, "temp": 15}  # Unsafe
     oracle.run_pre_flight_check(mission_b, weather_b)
+
+    # Scene 3: REAL-WORLD LIVE DATA
+    mission_c = {"site_name": "Kolkata_Industrial_Sector_Live"}
+    # Passing None triggers the Open-Meteo fetch
+    oracle.run_pre_flight_check(mission_c, None)
