@@ -15,6 +15,11 @@ if src_path not in sys.path:
 
 
 class TestDeepAuditor(unittest.TestCase):
+    """
+    Test suite for the DeepAuditor 'Judge' logic.
+    Verifies sensor saturation handling, material context switching, and complex leak detection.
+    """
+
     def setUp(self):
         self.auditor = DeepAuditor()
 
@@ -41,19 +46,19 @@ class TestDeepAuditor(unittest.TestCase):
         # Class 2 = Shiny Metal
         mode = self.auditor.analyze_material_context(2)
         self.assertEqual(mode, "HIGH_REFLECTIVITY_MODE")
-        self.assertTrue(self.auditor.THERMAL_REFLECTION_RISK)
+        self.assertTrue(self.auditor.thermal_reflection_risk)
 
         # Class 0 = Rust
         mode = self.auditor.analyze_material_context(0)
         self.assertEqual(mode, "NORMAL_MODE")
-        self.assertFalse(self.auditor.THERMAL_REFLECTION_RISK)
+        self.assertFalse(self.auditor.thermal_reflection_risk)
 
     def test_complex_leak_verification(self):
         """Test Failure Mode 2: Complex Leak Scenarios"""
         print("\nTEST: Complex Leak Verification")
 
         # Scenario A: High Pressure (Gas High, Temp Low, Normal Surface)
-        self.auditor.THERMAL_REFLECTION_RISK = False
+        self.auditor.thermal_reflection_risk = False
         leak, msg = self.auditor.verify_leak_complex(0.6, 20.0, False)
         self.assertTrue(leak)
         self.assertIn("TYPE-A", msg)
@@ -64,7 +69,7 @@ class TestDeepAuditor(unittest.TestCase):
         self.assertIn("TYPE-B", msg)
 
         # Scenario C: Shiny Pipe (Gas very High, Temp Normal, Shiny)
-        self.auditor.THERMAL_REFLECTION_RISK = True
+        self.auditor.thermal_reflection_risk = True
         leak, msg = self.auditor.verify_leak_complex(0.85, 28.0, False)
         self.assertTrue(leak)
         self.assertIn("TYPE-C", msg)
