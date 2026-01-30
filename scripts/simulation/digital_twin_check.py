@@ -61,14 +61,35 @@ class DigitalTwinOracle:
         wind_risk = environmental_data.get('wind_speed', 0) * 0.05
 
         for _ in range(1000):
-            # Simulation Logic
-            risk_roll = random.random()
-            if risk_roll < wind_risk:
-                # Wind caused instability
-                if risk_roll < (wind_risk * 0.1):
-                    critical_failures += 1  # Crash
-                else:
-                    failures += 1  # Missed objective
+            # PHYSICS-BASED SIMULATION
+            # Model: Quadcopter Dynamics under wind load
+
+            # 1. Forces
+            wind_speed = environmental_data.get('wind_speed', 0)
+            # Wind pressure = 0.5 * rho * v^2 * Cd * A
+            # Simplified: Force ~ v^2
+            wind_force = 0.05 * (wind_speed ** 2)
+
+            max_thrust = 50.0  # Newtons (Hypothetical Drone Limit)
+            required_thrust = 20.0 + wind_force  # Hover + Wind Compensation
+
+            # 2. Battery Sag (Temperature Dependent)
+            temp_c = environmental_data.get('temp', 25)
+            battery_efficiency = 1.0
+            if temp_c < 10:
+                battery_efficiency = 0.8  # Cold weather sag
+            elif temp_c > 40:
+                battery_efficiency = 0.9  # Overheat risk
+
+            available_thrust = max_thrust * battery_efficiency
+
+            # 3. Failure Conditions
+            if required_thrust > available_thrust:
+                # Motor Saturation -> Loss of Control
+                critical_failures += 1
+            elif required_thrust > (available_thrust * 0.9):
+                # Near limit -> Instability / Missed Objectives
+                failures += 1
 
         success_count = 1000 - failures - critical_failures
         print(f"RESULTS: {success_count} Success | {failures} Soft Fail | "
